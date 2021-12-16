@@ -1,0 +1,49 @@
+class Solution {
+    int dirs[][] = {{0,1},{1,0},{0,-1},{-1, 0}};
+    public class Pair{
+        int row;
+        int col;
+        Pair(int row, int col){
+            this.row = row;
+            this.col = col;
+        }
+    }
+    public int maxDistance(int[][] grid) {
+        LinkedList<Pair> queue = new LinkedList<>();
+        
+        for(int i =0; i < grid.length; i++){
+            for(int j = 0; j < grid[0].length; j++){
+                if(grid[i][j] == 1){
+                    queue.addLast(new Pair(i, j));
+                }
+            }
+        }
+        
+        if(queue.size() == 0 || queue.size() == grid.length*grid[0].length){
+            return -1;
+        }
+        
+//         BFS
+        int level = -1;
+        while(queue.size() > 0){
+            level++;
+            int size = queue.size();
+            while(size-- > 0){
+                Pair rem = queue.removeFirst();
+                
+                for(int i =0; i < 4; i++){
+                    int rowdash = rem.row + dirs[i][0];
+                    int coldash = rem.col + dirs[i][1];
+                    
+                    if(rowdash < 0 || coldash < 0 || rowdash >= grid.length || coldash >= grid[0].length || grid[rowdash][coldash] == 1){
+                        continue;
+                    }
+                    
+                    queue.addLast(new Pair(rowdash, coldash));
+                    grid[rowdash][coldash] = 1;
+                }
+            }
+        }
+        return level;
+    }
+}
